@@ -16,3 +16,20 @@ def read_dbf(file_path: str) -> pd.DataFrame:
 	df.columns = [col.lower() for col in df.columns]
 
 	return df
+
+def apply_map(series: pd.Series, map: dict) -> pd.Series:
+	"""
+	Applies a key value mapping to the input series
+	:param series: key values
+	:param map: key-value mapping
+	:return: mapped values
+	"""
+	return series.apply(lambda x: map.get(x))
+
+def float_to_int(series: pd.Series) -> pd.Series:
+	"""
+	Convert a series of non-negative floats to integer
+	:param series: non-negative floating point values
+	:return: integer value
+	"""
+	return series.fillna(-1).astype(int).replace(-1, None)
