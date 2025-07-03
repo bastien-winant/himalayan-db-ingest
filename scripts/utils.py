@@ -33,3 +33,26 @@ def float_to_int(series: pd.Series) -> pd.Series:
 	:return: integer value
 	"""
 	return series.fillna(-1).astype(int).replace(-1, None)
+
+def update_country_list(df, country_col):
+	new_country_df = df[[country_col]].reset_index(drop=True)
+	new_country_df['country_list_name'] = new_country_df[country_col]
+	new_country_df = new_country_df.drop(country_col, axis=1)
+
+	try:
+		country_df = pd.read_csv('../data/processed/countries.csv')
+		country_df.rename({'name': 'country_list_name'}, axis=1)
+	except:
+		country_df = pd.DataFrame(columns=['country_list_name'])
+
+	country_df = pd.concat([country_df, new_country_df])\
+		.drop_duplicates(ignore_index=True)
+
+	country_df.to_csv('../data/processed/countries.csv', index=False)
+
+	country_df.reset_index(names='country_list_id', inplace=True)
+	df = df.merge(country_df, how='left', left_on=country_col, right_on='country_list_name')\
+		.drop([country_col, 'country_list_name'], axis=1)\
+		.rename({'country_list_id': f"{country_col}_id"}, axis=1)
+
+	return df
