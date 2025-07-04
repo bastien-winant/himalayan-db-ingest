@@ -33,7 +33,7 @@ region_map = {
 	7: 'Kanjiroba-Far West'
 }
 
-peak_host_map = {
+host_map = {
 	0: 'Unclassified',
 	1: 'Nepal',
 	2: 'China',
@@ -42,4 +42,3 @@ peak_host_map = {
 	5: 'Nepal;India',
 	6: 'Nepal;China;India'
 }
-

@@ -36,12 +36,11 @@ def float_to_int(series: pd.Series) -> pd.Series:
 
 def update_country_list(df, country_col):
 	new_country_df = df[[country_col]].reset_index(drop=True)
-	new_country_df['country_list_name'] = new_country_df[country_col]
+	new_country_df['country_list_name'] = new_country_df[country_col].str.strip()
 	new_country_df = new_country_df.drop(country_col, axis=1)
 
 	try:
 		country_df = pd.read_csv('../data/processed/countries.csv')
-		country_df.rename({'name': 'country_list_name'}, axis=1)
 	except:
 		country_df = pd.DataFrame(columns=['country_list_name'])
 
