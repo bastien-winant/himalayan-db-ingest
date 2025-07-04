@@ -55,3 +55,12 @@ def update_country_list(df, country_col):
 		.rename({'country_list_id': f"{country_col}_id"}, axis=1)
 
 	return df
+
+def process_time_str(time_str):
+	if time_str is None or len(time_str) != 4:
+		return None
+
+	hours = int(time_str[:2])
+	minutes = int(time_str[2:])
+
+	return pd.Timedelta(hours=hours, minutes=minutes)
