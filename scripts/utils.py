@@ -36,7 +36,7 @@ def float_to_int(series: pd.Series) -> pd.Series:
 
 def update_country_list(df, country_col):
 	new_country_df = df[[country_col]].reset_index(drop=True)
-	new_country_df['country_list_name'] = new_country_df[country_col].str.strip()
+	new_country_df['country_list_name'] = new_country_df[country_col].str.strip().str.lower()
 	new_country_df = new_country_df.drop(country_col, axis=1)
 
 	try:
