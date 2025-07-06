@@ -35,20 +35,23 @@ def float_to_int(series: pd.Series) -> pd.Series:
 	return series.fillna(-1).astype(int).replace(-1, None)
 
 def update_country_list(df, country_col):
+	# clean up incoming country series
 	new_country_df = df[[country_col]].reset_index(drop=True)
 	new_country_df['country_list_name'] = new_country_df[country_col].str.strip().str.lower()
-	new_country_df = new_country_df.drop(country_col, axis=1)
+	new_country_df = new_country_df[['country_list_name']]
 
 	try:
 		country_df = pd.read_csv('../data/processed/countries.csv')
 	except:
 		country_df = pd.DataFrame(columns=['country_list_name'])
 
+	# concatenate existing and new lists
 	country_df = pd.concat([country_df, new_country_df])\
 		.drop_duplicates(ignore_index=True)
 
 	country_df.to_csv('../data/processed/countries.csv', index=False)
 
+	# merge replace country names with ids in input df
 	country_df.reset_index(names='country_list_id', inplace=True)
 	df = df.merge(country_df, how='left', left_on=country_col, right_on='country_list_name')\
 		.drop([country_col, 'country_list_name'], axis=1)\
