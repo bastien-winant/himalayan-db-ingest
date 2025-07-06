@@ -41,7 +41,7 @@ def update_country_list(df, country_col):
 
 	# rename country column name
 	new_country_df = df[[country_col]]
-	new_country_df['country_list_name'] = new_country_df[country_col]
+	new_country_df.loc[:, 'country_list_name'] = df[country_col]
 	new_country_df = new_country_df.drop(country_col, axis=1)
 
 	try:
