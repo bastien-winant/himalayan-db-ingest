@@ -10,7 +10,7 @@ himal_map = {
 	8: 'Jugal',
 	9: 'Kangchenjunga/Simhalila',
 	10: 'Kanjiroba',
-    11: 'Kanti/Palchung',
+  11: 'Kanti/Palchung',
 	12: 'Khumbu',
 	13: 'Langtang',
 	14: 'Makalu',
