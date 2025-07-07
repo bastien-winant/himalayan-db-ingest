@@ -1,6 +1,8 @@
 from dbfread import DBF
 import pandas as pd
 
+pd.options.mode.copy_on_write = True
+
 def read_dbf(file_path: str) -> pd.DataFrame:
 	"""
 	Reads in DBF file data and performs basic cleaning
@@ -41,7 +43,7 @@ def update_country_list(df, country_col):
 
 	# rename country column name
 	new_country_df = df[[country_col]]
-	new_country_df.loc[:, 'country_list_name'] = df[country_col]
+	new_country_df.loc[:, 'country_list_name'] = df.loc[:, country_col]
 	new_country_df = new_country_df.drop(country_col, axis=1)
 
 	try:
