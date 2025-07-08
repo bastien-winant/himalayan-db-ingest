@@ -39,6 +39,6 @@ df_peak_hosts = update_country_list(df_peak_hosts, 'host')
 
 df.drop(['phost', 'host'], axis=1, inplace=True)
 
-# CLEANUP
+# PEAKS CLEANUP
 df = df.drop(['heightf', 'pexpid', 'psmtdate', 'pcountry', 'psummiters', 'psmtnote'], axis=1)\
 	.rename({'pkname': 'name', 'heightm': 'height', 'himal': 'mountain_id', 'region': 'region_id'}, axis=1)
