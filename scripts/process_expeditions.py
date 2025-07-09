@@ -2,7 +2,7 @@ import pandas as pd
 from utils import *
 from mappings import *
 
-df = read_dbf('../data/raw/exped.DBF')
+df = read_dbf('./data/raw/exped.DBF')
 
 # PRIMARY KEY
 df.expid = df.expid.str.cat(df.year.astype(str), sep='_')
@@ -98,5 +98,5 @@ df.loc[
 	lambda row: row['bcdate'] + pd.Timedelta(days=row['totdays']), axis=1)
 
 df.drop(
-	['leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired', 'smthired', 'hdeaths', 'nohired', 'smtdays', 'totdays'],
+	['season', 'leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired', 'smthired', 'hdeaths', 'nohired', 'smtdays', 'totdays'],
 	axis=1, inplace=True)

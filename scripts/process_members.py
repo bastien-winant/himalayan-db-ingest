@@ -2,7 +2,7 @@ import pandas as pd
 from utils import *
 from mappings import *
 
-df = read_dbf('../data/raw/members.DBF')
+df = read_dbf('./data/raw/members.DBF')
 
 # PRIMARY KEY
 df.expid = df.expid.str.cat(df.myear.astype(str), sep='_')
