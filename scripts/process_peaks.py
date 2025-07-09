@@ -3,12 +3,47 @@ from utils import *
 from mappings import *
 
 # read in the raw data
-df = read_dbf('../data/raw/peaks.DBF')
+df = read_dbf('./data/raw/peaks.DBF')
 
-# MOUNTAINS AND REGIONS
-# store documentation defined mappings in dfs
+# MOUNTAINS
+# store documentation defined mapping in dfs
 df_mountains = pd.DataFrame.from_dict(himal_map, orient='index', columns=['name']).reset_index(names='id')
+
+# merge in host countries
+df_mountains = df_mountains.merge(df[['himal', 'phost']], how='left', left_on='id', right_on='himal')\
+	.drop_duplicates(ignore_index=True)
+
+df_mountains.phost = float_to_int(df_mountains.phost)
+df_mountains.drop('himal', axis=1, inplace=True)
+
+# explode semicolumn-separated host entries into scalar values
+df_mountains['host'] = apply_map(df_mountains.phost, host_map).str.split(';')
+df_mountains = df_mountains.explode('host').drop('phost', axis=1).drop_duplicates()
+df_mountains = update_country_list(df_mountains, 'host')
+
+# isolate mountain-host many-to-many relationship
+df_mountain_host_links = df_mountains[['id', 'host_id']].rename({'id': 'mountain_id'}, axis=1)
+df_mountains = df_mountains.drop('host_id', axis=1).drop_duplicates()
+
+# REGIONS
+# store documentation defined mapping in df
 df_regions = pd.DataFrame.from_dict(region_map, orient='index', columns=['name']).reset_index(names='id')
+
+# merge in host countries
+df_regions = (df_regions.merge(df[['region', 'phost']], how='left', left_on='id', right_on='region')\
+							.drop_duplicates(ignore_index=True))
+
+df_regions.phost = float_to_int(df_regions.phost)
+df_regions.drop('region', axis=1, inplace=True)
+
+# explode semicolumn-separated host entries into scalar values
+df_regions['host'] = apply_map(df_regions.phost, host_map).str.split(';')
+df_regions = df_regions.explode('host').drop('phost', axis=1).drop_duplicates()
+df_regions = update_country_list(df_regions, 'host')
+
+# isolate region-host many-to-many relationship
+df_region_host_links = df_regions[['id', 'host_id']].rename({'id': 'region_id'}, axis=1)
+df_regions = df_regions.drop('host_id', axis=1).drop_duplicates()
 
 # PEAK LOCAL NAMES
 # explode comma-separated names into scalar values

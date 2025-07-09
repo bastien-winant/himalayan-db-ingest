@@ -47,7 +47,7 @@ def update_country_list(df, country_col):
 	new_country_df = new_country_df.drop(country_col, axis=1)
 
 	try:
-		country_df = pd.read_csv('../data/processed/countries.csv')
+		country_df = pd.read_csv('./data/processed/countries.csv')
 	except:
 		country_df = pd.DataFrame(columns=['country_list_name'])
 
@@ -55,7 +55,7 @@ def update_country_list(df, country_col):
 	country_df = pd.concat([country_df, new_country_df])\
 		.drop_duplicates(ignore_index=True)
 
-	country_df.to_csv('../data/processed/countries.csv', index=False)
+	country_df.to_csv('./data/processed/countries.csv', index=False)
 
 	# merge replace country names with ids in input df
 	country_df.reset_index(names='country_list_id', inplace=True)
