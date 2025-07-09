@@ -16,7 +16,7 @@ df_mountains = df_mountains.merge(df[['himal', 'phost']], how='left', left_on='i
 df_mountains.phost = float_to_int(df_mountains.phost)
 df_mountains.drop('himal', axis=1, inplace=True)
 
-# explode semicolumn-separated host entries into scalar values
+# convert host ids to names and explode into scalar values
 df_mountains['host'] = apply_map(df_mountains.phost, host_map).str.split(';')
 df_mountains = df_mountains.explode('host').drop('phost', axis=1).drop_duplicates()
 df_mountains = update_country_list(df_mountains, 'host')
@@ -29,14 +29,14 @@ df_mountains = df_mountains.drop('host_id', axis=1).drop_duplicates()
 # store documentation defined mapping in df
 df_regions = pd.DataFrame.from_dict(region_map, orient='index', columns=['name']).reset_index(names='id')
 
-# merge in host countries
+# merge in host country ids
 df_regions = (df_regions.merge(df[['region', 'phost']], how='left', left_on='id', right_on='region')\
 							.drop_duplicates(ignore_index=True))
 
 df_regions.phost = float_to_int(df_regions.phost)
 df_regions.drop('region', axis=1, inplace=True)
 
-# explode semicolumn-separated host entries into scalar values
+# convert host ids to names and explode into scalar values
 df_regions['host'] = apply_map(df_regions.phost, host_map).str.split(';')
 df_regions = df_regions.explode('host').drop('phost', axis=1).drop_duplicates()
 df_regions = update_country_list(df_regions, 'host')
