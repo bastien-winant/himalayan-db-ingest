@@ -52,3 +52,18 @@ df_peaks = df.drop(
        'pexpid', 'psmtdate', 'pcountry', 'psummiters', 'psmtnote'], axis=1)\
 	.rename({'peakid': 'id', 'pkname': 'name', 'location': 'location_id', 'heightm': 'height', 'pstatus': 'climbed'},
 					axis=1)
+
+print("REGIONS")
+print(df_regions.columns)
+
+print("REGION HOSTS")
+print(df_host_regions.columns)
+
+print("MOUNTAINS")
+print(df_mountains.columns)
+
+print("LOCATIONS")
+print(df_locations.columns)
+
+print("PEAKS")
+print(df_peaks.columns)
