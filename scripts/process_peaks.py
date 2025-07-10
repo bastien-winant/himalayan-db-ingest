@@ -29,11 +29,6 @@ df_host_regions = update_country_list(df_host_regions, 'host')
 # define official mountain id mapping as df
 df_mountains = pd.DataFrame.from_dict(himal_map, orient='index', columns=['name']).reset_index(names='id')
 
-# isolate unique moutain/host combinations and get host names
-df_mountain_regions = df[['himal', 'region']]\
-	.drop_duplicates(ignore_index=True)\
-	.rename({'region': 'region_id', 'himal': 'mountain_id'}, axis=1)
-
 # LOCATIONS
 df_locations = df[['location', 'himal', 'region']]\
 	.rename({'location': 'location_id', 'himal': 'mountain_id', 'region': 'region_id'}, axis=1)\
