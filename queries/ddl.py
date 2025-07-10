@@ -16,8 +16,15 @@ region_hosts_ddl = """
 	CREATE TABLE IF NOT EXISTS region_host_links (
 		region_id INTEGER NOT NULL,
 		host_id INTEGER NOT NULL,
-		FOREIGN KEY (region_id) REFERENCES regions(id),
+		FOREIGN KEY (region_id) REFERENCES regions(id)
 		FOREIGN KEY (host_id) REFERENCES countries(id)
+	);
+"""
+
+mountains_ddl = """
+	CREATE TABLE IF NOT EXISTS mountains (
+		id INTEGER PRIMARY KEY,
+		name VARCHAR(100) NOT NULL
 	);
 """
 
@@ -50,4 +57,21 @@ peaks_ddl = """
 		FOREIGN KEY (location_id) REFERENCES locations (id)
 	);
 """
-ddl_queries = []
+
+local_names_ddl = """
+	CREATE TABLE IF NOT EXISTS peak_local_names (
+		peak_id INTEGER NOT NULL,
+		name VARCHAR(100) NOT NULL,
+		FOREIGN KEY (peak_id) REFERENCES peaks(id)
+	);
+"""
+
+ddl_queries = [
+	countries_ddl,
+	regions_ddl,
+	region_hosts_ddl,
+	mountains_ddl,
+	locations_ddl,
+	peaks_ddl,
+	local_names_ddl
+]
