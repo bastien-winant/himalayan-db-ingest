@@ -1,3 +1,13 @@
+host_map = {
+	0: 'Unclassified',
+	1: 'Nepal',
+	2: 'China',
+	3: 'India',
+	4: 'Nepal;China',
+	5: 'Nepal;India',
+	6: 'Nepal;China;India'
+}
+
 himal_map = {
 	0: 'Unclassified',
 	1: 'Annapurna',
@@ -31,16 +41,6 @@ region_map = {
 	5: 'Annapurna-Damodar-Peri',
 	6: 'Dhaulagiri-Mukut',
 	7: 'Kanjiroba-Far West'
-}
-
-host_map = {
-	0: 'Unclassified',
-	1: 'Nepal',
-	2: 'China',
-	3: 'India',
-	4: 'Nepal;China',
-	5: 'Nepal;India',
-	6: 'Nepal;China;India'
 }
 
 exped_termination_map = {
