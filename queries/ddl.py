@@ -76,12 +76,46 @@ expedition_nations_ddl = """
 """
 
 routes_ddl = """
-	id INTEGER,
-	expdition_id CHAR(14),
-	description TEXT,
-	number INTEGER,
-	success BOOLEAN,
-	ascent TEXT
+	CREATE TABLE IF NOT EXISTS expedition_routes (
+		id INTEGER PRIMARY KEY,
+		expedition_id CHAR(14),
+		route TEXT,
+		success BOOLEAN,
+		ascent TEXT,
+		number INTEGER,
+		FOREIGN KEY (expedition_id) REFERENCES expeditions (id)
+	);
+"""
+
+expeditions_ddl = """
+	CREATE TABLE IF NOT EXISTS expeditions (
+		id CHAR(14) PRIMARY KEY,
+		peak_id CHAR(6),
+		year INTEGER,
+		sponsor TEXT,
+		claimed BOOLEAN,
+		disputed BOOLEAN,
+		approach TEXT,
+		basecamp_date DATE,
+		summit_date DATE,
+		summit_time TIME,
+		termination_date DATE,
+		termination_reason TEXT,
+		termination_note TEXT,
+		highpoint INTEGER,
+		traverse BOOLEAN,
+		ski BOOLEAN,
+		parapente BOOLEAN,
+		rope INTEGER,
+		campsites TEXT,
+		routememo TEXT,
+		accidents TEXT,
+		achievements TEXR,
+		agency TEXT,
+		commercial_route BOOLEAN BOOLEAN,
+		standard_route BOOLEAN BOOLEAN,
+		primary_route BOOLEAN BOOLEAN
+	);
 """
 
 ddl_queries = [
