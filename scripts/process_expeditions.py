@@ -13,19 +13,6 @@ df.expid = df.expid.str.cat(df.year.astype(str), sep='_')
 df.host = apply_map(df.host, host_map)
 df = update_country_list(df, 'host')
 
-# # EXPEDITION COUNTRIES
-# # isolate expedition-countries combinations
-# df_exped_countries = df[['expid', 'countries']].dropna()
-#
-# #explode comma-separated entries into scalar values
-# df_exped_countries.countries = df_exped_countries.countries.str.split(',')
-# df_exped_countries = df_exped_countries.explode('countries', ignore_index=True)
-# df_exped_countries.countries = df_exped_countries.countries.str.strip()
-#
-# # swap country names for ids
-# df_exped_countries = update_country_list(df_exped_countries, 'countries')
-
-# remove countries column from original df
 df.drop('countries', axis=1, inplace=True)
 
 # EXPEDITION NATION
@@ -100,4 +87,3 @@ df.drop(['season', 'leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired',
 				axis=1, inplace=True)
 
 df.termreason = apply_map(df.termreason, exped_termination_map)
-print(df.termreason.value_counts())
