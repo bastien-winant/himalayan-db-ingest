@@ -66,6 +66,24 @@ local_names_ddl = """
 	);
 """
 
+expedition_nations_ddl = """
+	CREATE TABLE IF NOT EXISTS expedition_nations (
+		expedition_id CHAR(14),
+		country_id INTEGER,
+		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
+		FOREIGN KEY (country_id) REFERENCES conutries (id)
+	);
+"""
+
+routes_ddl = """
+	id INTEGER,
+	expdition_id CHAR(14),
+	description TEXT,
+	number INTEGER,
+	success BOOLEAN,
+	ascent TEXT
+"""
+
 ddl_queries = [
 	countries_ddl,
 	regions_ddl,
