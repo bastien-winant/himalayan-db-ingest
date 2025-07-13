@@ -106,15 +106,23 @@ expeditions_ddl = """
 		traverse BOOLEAN,
 		ski BOOLEAN,
 		parapente BOOLEAN,
+		camps INTEGER,
 		rope INTEGER,
+		o2_climb BOOLEAN,
+		o2_descent BOOLEAN,
+		o2_sleep BOOLEAN,
+		o2_medical BOOLEAN,
+		o2_taken BOOLEAN,
+		o2_unkown,
+		other_summits TEXT,
 		campsites TEXT,
-		routememo TEXT,
+		route_memo TEXT,
 		accidents TEXT,
-		achievements TEXR,
+		achievements TEXT,
 		agency TEXT,
-		commercial_route BOOLEAN BOOLEAN,
-		standard_route BOOLEAN BOOLEAN,
-		primary_route BOOLEAN BOOLEAN
+		commercial_route BOOLEAN,
+		standard_route BOOLEAN,
+		checksum INTEGER
 	);
 """
 

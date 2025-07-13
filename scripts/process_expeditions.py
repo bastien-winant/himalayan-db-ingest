@@ -87,5 +87,3 @@ df.drop(['season', 'leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired',
 				 'o2used', 'o2none'], axis=1, inplace=True)
 
 df.termreason = apply_map(df.termreason, exped_termination_map)
-
-print(df.columns)
