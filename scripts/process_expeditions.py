@@ -83,7 +83,9 @@ df.loc[
 
 df.drop(['smtdays', 'totdays'], axis=1, inplace=True)
 
-df.drop(['season', 'leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired', 'smthired', 'hdeaths', 'nohired'],
-				axis=1, inplace=True)
+df.drop(['season', 'leaders', 'totmembers', 'smtmembers', 'mdeaths', 'tothired', 'smthired', 'hdeaths', 'nohired',
+				 'o2used', 'o2none'], axis=1, inplace=True)
 
 df.termreason = apply_map(df.termreason, exped_termination_map)
+
+print(df.columns)
