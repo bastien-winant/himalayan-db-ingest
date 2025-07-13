@@ -16,13 +16,6 @@ df = df.merge(df_climbers, how='left').rename({'id': 'climber_id'}, axis=1)\
 	.drop(['fname', 'lname', 'sex', 'yob', 'citizen', 'residence', 'occupation', 'age', 'birthdate','calcage', 'hcn'],
 				axis=1)
 
-# # PARTICIPATIONS
-# df_participations = df[
-# 	['expid', 'climber_id', 'membid', 'status', 'leader', 'deputy', 'bconly', 'nottobc', 'support', 'disabled', 'hired',
-# 	 'sherpa', 'tibetan', 'msuccess', 'mclaimed', 'mdisputed', 'msolo', 'mtraverse', 'mski', 'mparapente', 'mspeed',
-# 	 'mhighpt', 'mperhighpt',  'mo2used', 'mo2none', 'mo2climb', 'mo2descent',
-#        'mo2sleep', 'mo2medical', 'mo2note']]
-
 # ASCENTS
 df_ascent_1 = df.loc[
 	df.msmtdate1.notna() |
@@ -90,5 +83,3 @@ df['mo2used'] = (df.mo2climb | df.mo2descent | df.mo2medical | df.mo2sleep) | df
 df['mo2unkwn'] = ~df.mo2used & ~df.mo2none
 
 df.drop(['mseason', 'mo2none'], axis=1, inplace=True)
-
-print(df.columns)
