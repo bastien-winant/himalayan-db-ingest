@@ -119,3 +119,10 @@ bid_termination_map = {
 	18: "Other",
 	19: "Unknown"
 }
+
+summit_note_map = {
+	0: "None",
+	1: "Flight-assisted ascent above BC",
+	2: "Flight-assisted descent above BC",
+	3: "Re-ascent from high camp"
+}
