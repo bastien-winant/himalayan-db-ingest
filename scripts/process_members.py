@@ -8,13 +8,13 @@ df = read_dbf('./data/raw/members.DBF')
 df.expid = df.expid.str.cat(df.myear.astype(str), sep='_')
 
 # CLIMBERS
-df_climbers = df[['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'hcn']]\
+df_climbers = df[['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'necrology', 'hcn']]\
 	.drop_duplicates(ignore_index=True)\
 	.reset_index(names='id')
 
 df = df.merge(df_climbers, how='left').rename({'id': 'climber_id'}, axis=1)\
-	.drop(['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'age', 'birthdate','calcage', 'hcn'],
-				axis=1)
+	.drop(['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'necrology', 'age', 'birthdate',
+				 'calcage', 'hcn'], axis=1)
 
 # CITIZENSHIPS
 # isolate climber-citizenship combinations
@@ -26,6 +26,8 @@ df_citizenships = df_citizenships.explode('citizen', ignore_index=True)
 
 # swap country names for ids
 df_citizenships = update_country_list(df_citizenships, 'citizen')
+
+df.drop('citizen', axis=1, inplace=True)
 
 # ASCENTS
 df_ascent_1 = df.loc[
@@ -88,11 +90,14 @@ df_calamities['route_number'] = float_to_int(df_calamities['route_number'])
 
 df_calamities.cause = apply_map(df_calamities.cause, cause_map)
 df_calamities['class'] = apply_map(df_calamities['class'], death_class_map)
-print(df_calamities.head())
+
 df.drop(['death', 'deathdate', 'deathtime', 'deathtype', 'deathhgtm', 'deathclass', 'deathnote', 'deathrte',
 				 'injury', 'injurydate', 'injurytime', 'injurytype', 'injuryhgtm', 'ams', 'weather'], axis=1, inplace=True)
 
 df['mo2used'] = (df.mo2climb | df.mo2descent | df.mo2medical | df.mo2sleep) | df.mo2used
 df['mo2unkwn'] = ~df.mo2used & ~df.mo2none
 
-df.drop(['mseason', 'mo2none'], axis=1, inplace=True)
+df.drop(['peakid', 'myear', 'mseason', 'mo2none'], axis=1, inplace=True)
+
+df.msmtbid = apply_map(df.msmtbid, bid_map)
+df.msmtterm = apply_map(df.msmtterm, bid_termination_map)

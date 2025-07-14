@@ -126,6 +126,101 @@ expeditions_ddl = """
 	);
 """
 
+climbers_ddl = """
+	CREATE TABLE IF NOT EXISTS climbers (
+		id INTEGER PRIMARY KEY,
+		first_name TEXT,
+		last_name TEXT,
+		gender CHAR,
+		birth_year INTEGER,
+		residence TEXT,
+		occupation TEXT,
+		necrology TEXT,
+		hcn TEXT
+	);
+"""
+
+citizenships_ddl = """
+	CREATE TABLE IF NOT EXISTS citizenships (
+		climber_id INTEGER,
+		country_id INTEGER,
+		FOREIGN KEY (climber_id) REFERENCES climbers (id),
+		FOREIGN KEY (country_id) REFERENCES countries (id)
+	);
+"""
+
+ascents_ddl = """
+	CREATE TABLE IF NOT EXISTS ascents (
+		expedition_id CHAR(14),
+		summit_date DATE,
+		summit_time TIME,
+		route_number INTEGER,
+		ascent_number INTEGER,
+		summit_note TEXT,
+		number INTEGER,
+		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
+		FOREIGN KEY (route_number) REFERENCES routes (id)
+	);
+"""
+
+calamities_ddl = """
+	CREATE TABLE IF NOT EXISTS calamities (
+		expedition_id CHAR(14),
+		climber_id INTEGER,
+		date DATE,
+		time TIME,
+		cause TEXT,
+		height INTEGER,
+		class TEXT,
+		note TEXT,
+		route_number INTEGER,
+		type VARCHAR(6),
+		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
+		FOREIGN KEY (climber_id) REFERENCES climbers (id)
+	);
+"""
+
+participations_ddl = """
+	CREATE TABLE IF NOT EXISTS participations (
+		expedition_id CHAR(14),
+		climber_id INTEGER,
+		member_id INTEGER,
+		status TEXT,
+		leader BOOLEAN,
+		deputy BOOLEAN,
+		basecamp_only BOOLEAN,
+		not_to_basecamp BOOLEAN,
+		support BOOLEAN,
+		disabled BOOLEAN,
+		hired BOOLEAN,
+		sherpa BOOLEAN,
+		tibetan BOOLEAN,
+		sucess BOOLEAN,
+		claimed BOOLEAN,
+		disputed BOOLEAN,
+		solo BOOLEAN,
+		traverse BOOLEAN,
+		ski BOOLEAN,
+		parapente BOOLEAN,
+		speed BOOLEAN,
+		highpoint_reached BOOLEAN,
+		personal_highpoint INTEGER,
+		o2_used BOOLEAN,
+		o2_climb BOOLEAN,
+		o2_descent BOOLEAN,
+		o2_sleep BOOLEAN,
+		o2_medical BOOLEAN,
+		o2_unknown BOOLEAN,
+		o2_note TEXT,
+		memo TEXT,
+		outcome TEXT,
+		termination_reason TEXT,
+		checksum INTEGER,
+		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
+		FOREIGN KEY (climber_id) REFERENCES climbers (id)
+	);
+"""
+
 ddl_queries = [
 	countries_ddl,
 	regions_ddl,
@@ -133,5 +228,12 @@ ddl_queries = [
 	mountains_ddl,
 	locations_ddl,
 	peaks_ddl,
-	local_names_ddl
+	local_names_ddl,
+	expedition_nations_ddl,
+	routes_ddl,
+	expeditions_ddl,
+	climbers_ddl,
+	ascents_ddl,
+	calamities_ddl,
+	participations_ddl
 ]

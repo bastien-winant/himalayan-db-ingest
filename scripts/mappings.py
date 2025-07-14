@@ -87,3 +87,35 @@ death_class_map = {
 	6: "Expedition evacuation",
 	7: "Other/unknown"
 }
+
+bid_map = {
+	0: "Unspecified",
+	1: "No summit bid",
+	2: "Aborted below high camp",
+	3: "Aborted at high camp",
+	4: "Aborted above high camp",
+	5: "Successful summit bid"
+}
+
+bid_termination_map = {
+	0: "Unspecified",
+	1: "Success",
+	2: "Success (subpeak, foresummit)",
+	3: "Bad weather (storms, high winds)",
+	4: "Bad conditions (deep snow, avalanches, falling rock/ice)",
+	5: "Accident (death or injury to self or others)",
+	6: "Altitude (AMS symptoms, breathing or unwell)",
+	7: "Exhaustion, fatigue, weakness or lack of motivation",
+	8: "Frostbite, snowblindness or coldness",
+	9: "Other illnesses or pains",
+	10: "Lack of supplies, support or equipment problems",
+	11: "O2 system failure",
+	12: "Route difficulty, intimidation or insufficient ability",
+	13: "Too late in day or too slow",
+	14: "Assisting, guiding, supporting or accompanying others",
+	15: "Route/camp preparation or rope fixing",
+	16: "Insufficient time left for expedition",
+	17: "Did not climb or intent to summit",
+	18: "Other",
+	19: "Unknown"
+}
