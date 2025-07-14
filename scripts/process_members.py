@@ -8,13 +8,25 @@ df = read_dbf('./data/raw/members.DBF')
 df.expid = df.expid.str.cat(df.myear.astype(str), sep='_')
 
 # CLIMBERS
-df_climbers = df[['fname', 'lname', 'sex', 'yob', 'citizen', 'residence', 'occupation', 'hcn']]\
+df_climbers = df[['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'hcn']]\
 	.drop_duplicates(ignore_index=True)\
 	.reset_index(names='id')
 
 df = df.merge(df_climbers, how='left').rename({'id': 'climber_id'}, axis=1)\
-	.drop(['fname', 'lname', 'sex', 'yob', 'citizen', 'residence', 'occupation', 'age', 'birthdate','calcage', 'hcn'],
+	.drop(['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'age', 'birthdate','calcage', 'hcn'],
 				axis=1)
+
+# CITIZENSHIPS
+# isolate climber-citizenship combinations
+df_citizenships = df[['climber_id', 'citizen']].drop_duplicates()
+
+# explode slash-separated entries into scaler values
+df_citizenships.citizen = df_citizenships.citizen.str.split("/")
+df_citizenships = df_citizenships.explode('citizen', ignore_index=True)
+
+# swap country names for ids
+df_citizenships = update_country_list(df_citizenships, 'citizen')
+print(df_citizenships.head())
 
 # ASCENTS
 df_ascent_1 = df.loc[
