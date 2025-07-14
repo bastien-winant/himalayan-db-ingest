@@ -26,7 +26,6 @@ df_citizenships = df_citizenships.explode('citizen', ignore_index=True)
 
 # swap country names for ids
 df_citizenships = update_country_list(df_citizenships, 'citizen')
-print(df_citizenships.head())
 
 # ASCENTS
 df_ascent_1 = df.loc[
@@ -75,7 +74,6 @@ df_deaths = df.loc[
 					 'deathrte': 'route_number', 'deathnote': 'note'}, axis=1)
 df_deaths['type'] = 'death'
 
-
 df_injuries = df.loc[
 	df.injury,
 	['expid', 'climber_id', 'injurydate', 'injurytime', 'injurytype', 'injuryhgtm', 'deathnote']]\
@@ -88,6 +86,9 @@ df_calamities = pd.concat([df_deaths, df_injuries], ignore_index=True)
 df_calamities['class'] = float_to_int(df_calamities['class'])
 df_calamities['route_number'] = float_to_int(df_calamities['route_number'])
 
+df_calamities.cause = apply_map(df_calamities.cause, cause_map)
+df_calamities['class'] = apply_map(df_calamities['class'], death_class_map)
+print(df_calamities.head())
 df.drop(['death', 'deathdate', 'deathtime', 'deathtype', 'deathhgtm', 'deathclass', 'deathnote', 'deathrte',
 				 'injury', 'injurydate', 'injurytime', 'injurytype', 'injuryhgtm', 'ams', 'weather'], axis=1, inplace=True)
 
