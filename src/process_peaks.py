@@ -1,6 +1,6 @@
 import pandas as pd
-from utils import *
-from mappings import *
+from .utils import *
+from .mappings import *
 
 # read in the raw data
 df = read_dbf('./data/raw/peaks.DBF')

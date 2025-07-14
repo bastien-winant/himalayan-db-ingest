@@ -1,6 +1,6 @@
 import pandas as pd
-from utils import *
-from mappings import *
+from .utils import *
+from .mappings import *
 
 df = read_dbf('./data/raw/members.DBF')
 
@@ -8,6 +8,7 @@ df = read_dbf('./data/raw/members.DBF')
 df.expid = df.expid.str.cat(df.myear.astype(str), sep='_')
 
 # CLIMBERS
+# create unique ids for climbers and swap in the original df
 df_climbers = df[['fname', 'lname', 'sex', 'yob', 'residence', 'occupation', 'necrology', 'hcn']]\
 	.drop_duplicates(ignore_index=True)\
 	.reset_index(names='id')
@@ -64,6 +65,8 @@ df_ascent_3 = df.loc[
 df_ascent_3['number'] = 3
 
 df_ascents = pd.concat([df_ascent_1, df_ascent_2, df_ascent_3], ignore_index=True)
+df_ascents.summit_note = apply_map(df_ascents.summit_note, summit_note_map)
+
 df.drop(
 	['msmtdate1', 'msmttime1', 'mroute1', 'mascent1', 'msmtnote1', 'msmtdate2', 'msmttime2', 'mroute2', 'mascent2',
 				 'msmtnote2', 'msmtdate3', 'msmttime3', 'mroute3', 'mascent3', 'msmtnote3'], axis=1, inplace=True)
@@ -83,6 +86,7 @@ df_injuries = df.loc[
 					 'deathnote': 'note'}, axis=1)
 df_injuries['type'] = 'injury'
 
+# combine injuries and deaths dfs
 df_calamities = pd.concat([df_deaths, df_injuries], ignore_index=True)
 
 df_calamities['class'] = float_to_int(df_calamities['class'])
@@ -99,5 +103,6 @@ df['mo2unkwn'] = ~df.mo2used & ~df.mo2none
 
 df.drop(['peakid', 'myear', 'mseason', 'mo2none'], axis=1, inplace=True)
 
+# apply summit bid mappings
 df.msmtbid = apply_map(df.msmtbid, bid_map)
 df.msmtterm = apply_map(df.msmtterm, bid_termination_map)

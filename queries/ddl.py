@@ -51,9 +51,9 @@ peaks_ddl = """
 		trekyear BOOLEAN,
 		restrict BOOLEAN,
 		climbed INTEGER,
-		peakmemo TEXT,
-		refermemo TEXT,
-		photomemo TEXT,
+		peak_memo TEXT,
+		reference_memo TEXT,
+		photo_memo TEXT,
 		FOREIGN KEY (location_id) REFERENCES locations (id)
 	);
 """

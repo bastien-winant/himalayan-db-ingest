@@ -1,6 +1,6 @@
 import pandas as pd
-from utils import *
-from mappings import *
+from .utils import *
+from .mappings import *
 
 df = read_dbf('./data/raw/exped.DBF')
 
