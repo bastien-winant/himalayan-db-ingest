@@ -14,10 +14,8 @@ regions_ddl = """
 
 region_hosts_ddl = """
 	CREATE TABLE IF NOT EXISTS region_host_links (
-		region_id INTEGER NOT NULL,
-		host_id INTEGER NOT NULL,
-		FOREIGN KEY (region_id) REFERENCES regions(id)
-		FOREIGN KEY (host_id) REFERENCES countries(id)
+		region_id INTEGER NOT NULL REFERENCES regions(id),
+		host_id INTEGER NOT NULL REFERENCES countries(id)
 	);
 """
 
@@ -32,10 +30,8 @@ locations_ddl = """
 	CREATE TABLE IF NOT EXISTS locations (
 		id INTEGER PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE,
-		mountain_id INTEGER,
-		region_id INTEGER,
-		FOREIGN KEY (mountain_id) REFERENCES mountains(id),
-		FOREIGN KEY (region_id) REFERENCES regions(id)
+		mountain_id INTEGER REFERENCES mountains(id),
+		region_id INTEGER REFERENCES regions(id)
 	);
 """
 
@@ -43,7 +39,7 @@ peaks_ddl = """
 	CREATE TABLE IF NOT EXISTS peaks (
 		id CHAR(6) PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE,
-		location_id INTEGER,
+		location_id INTEGER REFERENCES locations(id),
 		height INTEGER,
 		open BOOLEAN,
 		unlisted BOOLEAN,
@@ -53,44 +49,21 @@ peaks_ddl = """
 		climbed INTEGER,
 		peak_memo TEXT,
 		reference_memo TEXT,
-		photo_memo TEXT,
-		FOREIGN KEY (location_id) REFERENCES locations (id)
+		photo_memo TEXT
 	);
 """
 
 local_names_ddl = """
 	CREATE TABLE IF NOT EXISTS peak_local_names (
-		peak_id INTEGER NOT NULL,
-		name VARCHAR(100) NOT NULL,
-		FOREIGN KEY (peak_id) REFERENCES peaks(id)
-	);
-"""
-
-expedition_nations_ddl = """
-	CREATE TABLE IF NOT EXISTS expedition_nations (
-		expedition_id CHAR(14),
-		country_id INTEGER,
-		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
-		FOREIGN KEY (country_id) REFERENCES conutries (id)
-	);
-"""
-
-routes_ddl = """
-	CREATE TABLE IF NOT EXISTS expedition_routes (
-		id INTEGER PRIMARY KEY,
-		expedition_id CHAR(14),
-		route TEXT,
-		success BOOLEAN,
-		ascent TEXT,
-		number INTEGER,
-		FOREIGN KEY (expedition_id) REFERENCES expeditions (id)
+		peak_id CHAR(6) NOT NULL REFERENCES peaks(id),
+		name VARCHAR(100) NOT NULL
 	);
 """
 
 expeditions_ddl = """
 	CREATE TABLE IF NOT EXISTS expeditions (
 		id CHAR(14) PRIMARY KEY,
-		peak_id CHAR(6),
+		peak_id CHAR(6) REFERENCES peaks(id),
 		year INTEGER,
 		sponsor TEXT,
 		claimed BOOLEAN,
@@ -113,7 +86,7 @@ expeditions_ddl = """
 		o2_sleep BOOLEAN,
 		o2_medical BOOLEAN,
 		o2_taken BOOLEAN,
-		o2_unkown,
+		o2_unkown BOOLEAN,
 		other_summits TEXT,
 		campsites TEXT,
 		route_memo TEXT,
@@ -123,6 +96,24 @@ expeditions_ddl = """
 		commercial_route BOOLEAN,
 		standard_route BOOLEAN,
 		checksum INTEGER
+	);
+"""
+
+expedition_nations_ddl = """
+	CREATE TABLE IF NOT EXISTS expedition_nations (
+		expedition_id CHAR(14) REFERENCES expeditions(id),
+		country_id INTEGER REFERENCES countries(id)
+	);
+"""
+
+routes_ddl = """
+	CREATE TABLE IF NOT EXISTS expedition_routes (
+		id INTEGER PRIMARY KEY,
+		expedition_id CHAR(14) REFERENCES expeditions(id),
+		route TEXT,
+		success BOOLEAN,
+		ascent TEXT,
+		number INTEGER
 	);
 """
 
@@ -142,31 +133,28 @@ climbers_ddl = """
 
 citizenships_ddl = """
 	CREATE TABLE IF NOT EXISTS citizenships (
-		climber_id INTEGER,
-		country_id INTEGER,
-		FOREIGN KEY (climber_id) REFERENCES climbers (id),
-		FOREIGN KEY (country_id) REFERENCES countries (id)
+		climber_id INTEGER REFERENCES climbers(id),
+		country_id INTEGER REFERENCES countries(id)
 	);
 """
 
 ascents_ddl = """
 	CREATE TABLE IF NOT EXISTS ascents (
-		expedition_id CHAR(14),
+		expedition_id CHAR(14) REFERENCES expeditions(id),
+		climber_id INTEGER REFERENCES climbers(id),
 		summit_date DATE,
 		summit_time TIME,
 		route_number INTEGER,
 		ascent_number INTEGER,
 		summit_note TEXT,
-		number INTEGER,
-		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
-		FOREIGN KEY (route_number) REFERENCES routes (id)
+		number INTEGER
 	);
 """
 
 calamities_ddl = """
 	CREATE TABLE IF NOT EXISTS calamities (
-		expedition_id CHAR(14),
-		climber_id INTEGER,
+		expedition_id CHAR(14) REFERENCES expeditions(id),
+		climber_id INTEGER REFERENCES climbers(id),
 		date DATE,
 		time TIME,
 		cause TEXT,
@@ -174,16 +162,14 @@ calamities_ddl = """
 		class TEXT,
 		note TEXT,
 		route_number INTEGER,
-		type VARCHAR(6),
-		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
-		FOREIGN KEY (climber_id) REFERENCES climbers (id)
+		type VARCHAR(6)
 	);
 """
 
 participations_ddl = """
 	CREATE TABLE IF NOT EXISTS participations (
-		expedition_id CHAR(14),
-		climber_id INTEGER,
+		expedition_id CHAR(14) REFERENCES expeditions(id),
+		climber_id INTEGER REFERENCES climbers(id),
 		member_id INTEGER,
 		status TEXT,
 		leader BOOLEAN,
@@ -215,9 +201,7 @@ participations_ddl = """
 		memo TEXT,
 		outcome TEXT,
 		termination_reason TEXT,
-		checksum INTEGER,
-		FOREIGN KEY (expedition_id) REFERENCES expeditions (id),
-		FOREIGN KEY (climber_id) REFERENCES climbers (id)
+		checksum INTEGER
 	);
 """
 
@@ -229,10 +213,11 @@ ddl_queries = [
 	locations_ddl,
 	peaks_ddl,
 	local_names_ddl,
+	expeditions_ddl,
 	expedition_nations_ddl,
 	routes_ddl,
-	expeditions_ddl,
 	climbers_ddl,
+	citizenships_ddl,
 	ascents_ddl,
 	calamities_ddl,
 	participations_ddl
