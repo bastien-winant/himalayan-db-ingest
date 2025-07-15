@@ -1,32 +1,32 @@
-countries_ddl = """
+countries_create = """
 	CREATE TABLE IF NOT EXISTS countries (
 		id INTEGER PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE
 	);
 """
 
-regions_ddl = """
+regions_create = """
 	CREATE TABLE IF NOT EXISTS regions (
 		id INTEGER PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE
 	);
 """
 
-region_hosts_ddl = """
+region_hosts_create = """
 	CREATE TABLE IF NOT EXISTS region_host_links (
 		region_id INTEGER NOT NULL REFERENCES regions(id),
 		host_id INTEGER NOT NULL REFERENCES countries(id)
 	);
 """
 
-mountains_ddl = """
+mountains_create = """
 	CREATE TABLE IF NOT EXISTS mountains (
 		id INTEGER PRIMARY KEY,
 		name VARCHAR(100) NOT NULL
 	);
 """
 
-locations_ddl = """
+locations_create = """
 	CREATE TABLE IF NOT EXISTS locations (
 		id INTEGER PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE,
@@ -35,7 +35,7 @@ locations_ddl = """
 	);
 """
 
-peaks_ddl = """
+peaks_create = """
 	CREATE TABLE IF NOT EXISTS peaks (
 		id CHAR(6) PRIMARY KEY,
 		name VARCHAR(100) NOT NULL UNIQUE,
@@ -53,14 +53,14 @@ peaks_ddl = """
 	);
 """
 
-local_names_ddl = """
+local_names_create = """
 	CREATE TABLE IF NOT EXISTS peak_local_names (
 		peak_id CHAR(6) NOT NULL REFERENCES peaks(id),
 		name VARCHAR(100) NOT NULL
 	);
 """
 
-expeditions_ddl = """
+expeditions_create = """
 	CREATE TABLE IF NOT EXISTS expeditions (
 		id CHAR(14) PRIMARY KEY,
 		peak_id CHAR(6) REFERENCES peaks(id),
@@ -99,14 +99,14 @@ expeditions_ddl = """
 	);
 """
 
-expedition_nations_ddl = """
+expedition_nations_create = """
 	CREATE TABLE IF NOT EXISTS expedition_nations (
 		expedition_id CHAR(14) REFERENCES expeditions(id),
 		country_id INTEGER REFERENCES countries(id)
 	);
 """
 
-routes_ddl = """
+routes_create = """
 	CREATE TABLE IF NOT EXISTS expedition_routes (
 		id INTEGER PRIMARY KEY,
 		expedition_id CHAR(14) REFERENCES expeditions(id),
@@ -117,7 +117,7 @@ routes_ddl = """
 	);
 """
 
-climbers_ddl = """
+climbers_create = """
 	CREATE TABLE IF NOT EXISTS climbers (
 		id INTEGER PRIMARY KEY,
 		first_name TEXT,
@@ -131,14 +131,14 @@ climbers_ddl = """
 	);
 """
 
-citizenships_ddl = """
+citizenships_create = """
 	CREATE TABLE IF NOT EXISTS citizenships (
 		climber_id INTEGER REFERENCES climbers(id),
 		country_id INTEGER REFERENCES countries(id)
 	);
 """
 
-ascents_ddl = """
+ascents_create = """
 	CREATE TABLE IF NOT EXISTS ascents (
 		expedition_id CHAR(14) REFERENCES expeditions(id),
 		climber_id INTEGER REFERENCES climbers(id),
@@ -151,7 +151,7 @@ ascents_ddl = """
 	);
 """
 
-calamities_ddl = """
+calamities_create = """
 	CREATE TABLE IF NOT EXISTS calamities (
 		expedition_id CHAR(14) REFERENCES expeditions(id),
 		climber_id INTEGER REFERENCES climbers(id),
@@ -166,7 +166,7 @@ calamities_ddl = """
 	);
 """
 
-participations_ddl = """
+participations_create = """
 	CREATE TABLE IF NOT EXISTS participations (
 		expedition_id CHAR(14) REFERENCES expeditions(id),
 		climber_id INTEGER REFERENCES climbers(id),
@@ -205,20 +205,20 @@ participations_ddl = """
 	);
 """
 
-ddl_queries = [
-	countries_ddl,
-	regions_ddl,
-	region_hosts_ddl,
-	mountains_ddl,
-	locations_ddl,
-	peaks_ddl,
-	local_names_ddl,
-	expeditions_ddl,
-	expedition_nations_ddl,
-	routes_ddl,
-	climbers_ddl,
-	citizenships_ddl,
-	ascents_ddl,
-	calamities_ddl,
-	participations_ddl
+ddl_create_queries = [
+	countries_create,
+	regions_create,
+	region_hosts_create,
+	mountains_create,
+	locations_create,
+	peaks_create,
+	local_names_create,
+	expeditions_create,
+	expedition_nations_create,
+	routes_create,
+	climbers_create,
+	citizenships_create,
+	ascents_create,
+	calamities_create,
+	participations_create
 ]
