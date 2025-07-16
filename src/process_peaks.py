@@ -1,6 +1,7 @@
 import pandas as pd
 from .utils import *
 from .mappings import *
+import psycopg2
 
 # read in the raw data
 df = read_dbf('./data/raw/peaks.DBF')
@@ -31,7 +32,7 @@ df_mountains = pd.DataFrame.from_dict(himal_map, orient='index', columns=['name'
 
 # LOCATIONS
 df_locations = df[['location', 'himal', 'region']]\
-	.rename({'location': 'location_id', 'himal': 'mountain_id', 'region': 'region_id'}, axis=1)\
+	.rename({'location': 'name', 'himal': 'mountain_id', 'region': 'region_id'}, axis=1)\
 	.drop_duplicates(ignore_index=True)\
 	.reset_index(names='id')
 
@@ -53,17 +54,7 @@ df_peaks = df.drop(
 	.rename({'peakid': 'id', 'pkname': 'name', 'location': 'location_id', 'heightm': 'height', 'pstatus': 'climbed'},
 					axis=1)
 
-print("REGIONS")
 print(df_regions.columns)
-
-print("REGION HOSTS")
-print(df_host_regions.columns)
-
-print("MOUNTAINS")
 print(df_mountains.columns)
-
-print("LOCATIONS")
-print(df_locations.columns)
-
-print("PEAKS")
+print(df_locations.head())
 print(df_peaks.columns)

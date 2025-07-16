@@ -1,0 +1,5 @@
+pg_ctl -D /Users/bastienwinant/Desktop/projects/himalayan-db-modeling/pg_cluster -l logfile start
+
+postgres -D /Users/bastienwinant/Desktop/projects/himalayan-db-modeling/pg_cluster > /Users/bastienwinant/Desktop/projects/himalayan-db-modeling/pg_cluster/logfile 2>&1 &
+
+pg_ctl -D /Users/bastienwinant/Desktop/projects/himalayan-db-modeling/pg_cluster stop

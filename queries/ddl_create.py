@@ -107,7 +107,7 @@ expedition_nations_create = """
 """
 
 routes_create = """
-	CREATE TABLE IF NOT EXISTS expedition_routes (
+	CREATE TABLE IF NOT EXISTS routes (
 		id INTEGER PRIMARY KEY,
 		expedition_id CHAR(14) REFERENCES expeditions(id),
 		route TEXT,

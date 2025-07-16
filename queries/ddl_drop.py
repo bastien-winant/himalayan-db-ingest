@@ -15,19 +15,19 @@ calamities_drop = "DROP TABLE IF EXISTS calamities;"
 participations_drop = "DROP TABLE IF EXISTS participations;"
 
 ddl_drop_queries = [
-	countries_drop,
-	regions_drop,
-	region_hosts_drop,
-	mountains_drop,
-	locations_drop,
-	peaks_drop,
-	local_names_drop,
-	expeditions_drop,
-	expedition_nations_drop,
-	routes_drop,
-	climbers_drop,
-	citizenships_drop,
-	ascents_drop,
+	participations_drop,
 	calamities_drop,
-	participations_drop
+	ascents_drop,
+	routes_drop,
+	citizenships_drop,
+	climbers_drop,
+	expedition_nations_drop,
+	expeditions_drop,
+	local_names_drop,
+	peaks_drop,
+	locations_drop,
+	region_hosts_drop,
+	regions_drop,
+	mountains_drop,
+	countries_drop
 ]
