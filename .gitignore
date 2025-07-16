@@ -292,3 +292,4 @@ go.work.sum
 data/
 pg_cluster/
 *.txt
+*.zip
