@@ -6,6 +6,12 @@ variable "aws_region" {
 
 variable "data_bucket_prefix" {
   type        = string
-  default     = "himdata-"
+  default     = "himaldb-data-"
   description = "Data S3 bucket name prefix"
+}
+
+variable "code_bucket_prefix" {
+  type        = string
+  default     = "himaldb-code-"
+  description = "Code S3 bucket name prefix"
 }
