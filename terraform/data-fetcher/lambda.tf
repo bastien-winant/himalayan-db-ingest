@@ -25,7 +25,7 @@ resource "aws_s3_object" "lambda_code_object" {
 
 # Create Lambda function from S3 object
 resource "aws_lambda_function" "fetch_function" {
-  function_name = "lambda_function"
+  function_name = var.lambda_function_name
   role          = aws_iam_role.lambda_exec_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
