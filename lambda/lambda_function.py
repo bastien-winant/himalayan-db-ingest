@@ -64,6 +64,11 @@ def upload_to_s3(file_path, bucket_name, key):
 		raise
 
 def upload_data(bucket_name: str) -> None:
+	"""
+	Upload DBF data file as CSV to S3
+	:param bucket_name: name of the S3 bucket to load the CSV files to
+	:return:
+	"""
 	try:
 		for filename in os.listdir("/tmp/Himalayan Database/HIMDATA"):
 			local_path = os.path.join("/tmp/Himalayan Database/HIMDATA", filename)
@@ -91,20 +96,14 @@ def handler(event, context):
 	try:
 		bucket_name = event["bucket_name"]
 
-		fetch_outcome = fetch_data()
+		fetch_data()
+		upload_data(bucket_name)
 
-		if fetch_outcome == 0:
-			upload_data(bucket_name)
-		else:
-			raise
-
-			return {
-				"statusCode": 200,
-				"message": "Receipt processed successfully"
-			}
-		else:
-			raise
+		return {
+			"statusCode": 200,
+			"message": "Himalayan DB data processed sucessfully"
+		}
 
 	except Exception as e:
-		logger.error(f"Error processing order: {str(e)}")
+		logger.error(f"Error processing Himalayan DB data: {str(e)}")
 		raise
