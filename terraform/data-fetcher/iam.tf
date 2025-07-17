@@ -17,18 +17,27 @@ resource "aws_iam_role" "lambda_exec_role" {
 }
 
 # Policy document with write access to the S3 data bucket
-data "aws_iam_policy_document" "data_bucket_write_permission" {
+data "aws_iam_policy_document" "lambda_permission" {
   # Allow role to write to the data bucket
   statement {
     actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.data_bucket.arn}/*"]
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["arn:aws:logs:*:*:*"]
   }
 }
 
 # Create an IAM policy with the S3 write policy document
 resource "aws_iam_policy" "lambda_policy" {
   name   = "lambda_data_write_policy"
-  policy = data.aws_iam_policy_document.data_bucket_write_permission.json
+  policy = data.aws_iam_policy_document.lambda_permission.json
 }
 
 # Attach the S3 policy to the Lambda-trusted role

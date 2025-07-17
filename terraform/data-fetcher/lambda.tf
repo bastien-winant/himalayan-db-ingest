@@ -1,8 +1,18 @@
+resource "aws_cloudwatch_log_group" "lambda_log_group" {
+  name              = "/aws/lambda/${var.lambda_function_name}"
+  retention_in_days = 14
+
+  tags = {
+    Environment = "production"
+    Function = var.lambda_function_name
+  }
+}
+
 # create archive file for the Python script
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../../lambda"
-  output_path = "${path.module}/lambda_function.zip"
+  output_path = "${path.module}/${var.lambda_function_name}.zip"
 }
 
 # store the lambda package to s3
@@ -32,4 +42,10 @@ resource "aws_lambda_function" "fetch_function" {
     application_log_level = "INFO"
     system_log_level      = "WARN"
   }
+
+  # Ensure IAM role and log group are ready
+  depends_on = [
+    aws_iam_role_policy_attachment.attach_lambda_policy,
+    aws_cloudwatch_log_group.lambda_log_group
+  ]
 }

@@ -15,3 +15,8 @@ variable "code_bucket_prefix" {
   default     = "himaldb-code-"
   description = "Code S3 bucket name prefix"
 }
+
+variable "lambda_function_name" {
+  type = string
+  default = "himaldb_lambda"
+}
