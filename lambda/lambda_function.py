@@ -4,23 +4,34 @@ from dbfread import DBF
 import pandas as pd
 from pathlib import Path
 import boto3
+import logging
 
+# Initialize the S3 client outside of the handler
 s3_client = boto3.client('s3')
+
+# Initialize the logger
+logger = logging.getLogger()
+logger.setLevel("INFO")
 
 # fetch and unzip the raw data files
 def fetch_data():
 	url = "https://www.himalayandatabase.com/downloads/Himalayan%20Database.zip"
 	zip_path = "/tmp/data.zip"
 
-	fetch_command = f"curl -s -o {zip_path} {url}"
-	fetch_result = subprocess.run(fetch_command.split(), capture_output=True, text=True)
+	try:
+		fetch_command = f"curl -s -o {zip_path} {url}"
+		subprocess.run(fetch_command.split(), capture_output=True, text=True)
 
-	if fetch_result.returncode == 0:
 		unzip_command = f"unzip {zip_path} -d tmp"
-		unzip_result = subprocess.run(unzip_command.split(), capture_output=True, text=True)
-		return unzip_result.returncode
-	else:
-		return 1
+		subprocess.run(unzip_command.split(), capture_output=True, text=True)
+
+		logger.info(f"Successfully fetched data and saved to {zip_path}")
+	except subprocess.CalledProcessError as e:
+		logger.error(f"Unable to fetch the raw data files: {str(e)}")
+		raise
+	except Exception as e:
+		logger.error(f"Unexpected error: {str(e)}")
+		raise
 
 # read the dbf file into a pandas dataframe with basic data cleaning
 def read_dbf(file_path: str) -> pd.DataFrame:
@@ -40,31 +51,60 @@ def read_dbf(file_path: str) -> pd.DataFrame:
 	return df
 
 def upload_to_s3(file_path, bucket_name, key):
-	with open(file_path, "rb") as f:
-		s3.put_object(
-			Bucket=bucket_name,
-			Key=key,
-			Body=f
-		)
-		print(f"Uploaded to s3://{bucket_name}/{key}")
+	try:
+		with open(file_path, "rb") as f:
+			s3.put_object(
+				Bucket=bucket_name,
+				Key=key,
+				Body=f
+			)
+			logger.info(f"Successfully uploaded file {file_path} in S3 bucket {bucket_name}")
+	except Exception as e:
+		logger.error(f"Failed to upload CSV file to S3: {str(e)}")
+		raise
 
-def upload_data(bucket_name):
-	for filename in os.listdir("/tmp/Himalayan Database/HIMDATA"):
-		local_path = os.path.join("/tmp/Himalayan Database/HIMDATA", filename)
+def upload_data(bucket_name: str) -> None:
+	try:
+		for filename in os.listdir("/tmp/Himalayan Database/HIMDATA"):
+			local_path = os.path.join("/tmp/Himalayan Database/HIMDATA", filename)
 
-		if local_path.endswith("DBF"):
-			csv_filename = Path(local_path).stem + ".csv"
-			csv_file_path = f"/tmp/{csv_filename}"
-			df = read_dbf(local_path)
-			df.to_csv(csv_file_path, index=False)
+			if local_path.endswith("DBF"):
+				csv_filename = Path(local_path).stem + ".csv"
+				csv_file_path = f"/tmp/{csv_filename}"
+				df = read_dbf(local_path)
+				df.to_csv(csv_file_path, index=False)
 
-			upload_to_s3(csv_file_path, bucket_name, csv_filename)
+				upload_to_s3(csv_file_path, bucket_name, csv_filename)
+	except Exception as e:
+		logger.error(f"Failed to upload CSV files to S3: {str(e)}")
+		raise
 
-# def handler(event, context):
-def handler():
-	bucket_name = "data_bucket_name"
+def handler(event, context):
+	"""
+	Main Lambda handler function
+	Parameters:
+			event: Dict containing the Lambda function event data
+			context: Lambda runtime context
+	Returns:
+			Dict containing status message
+	"""
+	try:
+		bucket_name = event["bucket_name"]
 
-	fetch_outcome = fetch_data()
+		fetch_outcome = fetch_data()
 
-	if fetch_outcome == 0:
-		upload_data(bucket_name)
+		if fetch_outcome == 0:
+			upload_data(bucket_name)
+		else:
+			raise
+
+			return {
+				"statusCode": 200,
+				"message": "Receipt processed successfully"
+			}
+		else:
+			raise
+
+	except Exception as e:
+		logger.error(f"Error processing order: {str(e)}")
+		raise

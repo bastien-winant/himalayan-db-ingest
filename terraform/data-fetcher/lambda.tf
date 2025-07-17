@@ -36,13 +36,6 @@ resource "aws_lambda_function" "fetch_function" {
 
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
-  # Advanced logging configuration
-  logging_config {
-    log_format            = "JSON"
-    application_log_level = "INFO"
-    system_log_level      = "WARN"
-  }
-
   # Ensure IAM role and log group are ready
   depends_on = [
     aws_iam_role_policy_attachment.attach_lambda_policy,
