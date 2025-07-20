@@ -4,19 +4,24 @@ variable "aws_region" {
   description = "Overall region to host the project resources"
 }
 
-variable "data_bucket_prefix" {
-  type        = string
-  default     = "himaldb-data-"
-  description = "Data S3 bucket name prefix"
-}
-
 variable "code_bucket_prefix" {
   type        = string
   default     = "himaldb-code-"
   description = "Code S3 bucket name prefix"
 }
 
-variable "lambda_function_name" {
+variable "vpc_cidr_block" {
   type = string
-  default = "himaldb_lambda"
+  default = "192.168.0.0/16"
+  description = "Address range for the VPC"
+}
+
+variable "vpc_public_cidr_block" {
+  type = string
+  default = "192.168.1.0/24"
+}
+
+variable "vpc_private_cidr_block" {
+  type = string
+  default = "192.168.2.0/24"
 }

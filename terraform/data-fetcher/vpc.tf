@@ -1,19 +1,20 @@
 # virtual private network
 resource "aws_vpc" "vpc" {
-  cidr_block = "192.168.0.0/16"
+  cidr_block = var.vpc_cidr_block
   instance_tenancy = "default"
 }
 
+# public subnet
 resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.vpc.id
-  cidr_block = "192.168.1.0/24"
+  cidr_block = var.vpc_public_cidr_block
   map_public_ip_on_launch = true
 }
 
 # private subnet that will host the database
 resource "aws_subnet" "private_subnet" {
   vpc_id = aws_vpc.vpc.id
-  cidr_block = "192.168.2.0/24"
+  cidr_block = var.vpc_private_cidr_block
 }
 
 
