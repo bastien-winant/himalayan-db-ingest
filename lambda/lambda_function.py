@@ -79,6 +79,8 @@ def upload_data(bucket_name: str) -> None:
 				df = read_dbf(local_path)
 				df.to_csv(csv_file_path, index=False)
 
+				# TODO: load dataframe directly to RDS
+
 				upload_to_s3(csv_file_path, bucket_name, csv_filename)
 	except Exception as e:
 		logger.error(f"Failed to upload CSV files to S3: {str(e)}")
