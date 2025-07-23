@@ -1,6 +1,7 @@
 resource "aws_db_subnet_group" "vpc_db_subnet_group" {
-  name        = "db-subnet-group"
-  subnet_ids = [aws_subnet.db_vpc_subnet.id]
+  subnet_ids = [
+    aws_subnet.db_vpc_private_subnets[0].id,
+    aws_subnet.db_vpc_private_subnets[1].id]
 
   tags = {
     Name = "My DB subnet group"
@@ -17,4 +18,7 @@ resource "aws_db_instance" "db" {
   password             = "postgres"
   db_subnet_group_name = aws_db_subnet_group.vpc_db_subnet_group.name
   port                 = 5432
+  publicly_accessible  = false
+  skip_final_snapshot = true
+  apply_immediately = true
 }
