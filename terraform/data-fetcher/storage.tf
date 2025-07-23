@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "lambda_code_file" {
   force_destroy = true
 
   tags = {
-    Name = "The Himalayan DB"
+    Name        = "The Himalayan DB"
     Environment = "Dev"
   }
 }
