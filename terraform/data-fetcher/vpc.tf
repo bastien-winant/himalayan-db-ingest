@@ -9,10 +9,16 @@ resource "aws_vpc" "db_vpc" {
   }
 }
 
-# Private Subnet
-resource "aws_subnet" "db_vpc_subnet" {
-  vpc_id     = aws_vpc.db_vpc.id
-  cidr_block = var.private_subnet_cidr_block
+# Private Subnets
+resource "aws_subnet" "public" {
+  count             = length(var.private_subnets_cidr)
+  vpc_id            = aws_vpc.db_vpc.id
+  cidr_block        = element(var.private_subnets_cidr, count.index)
+  availability_zone = element(var.availability_zones, count.index)
+
+  tags = {
+    Name = "Subnet-${count.index + 1}"
+  }
 }
 
 # Inbound Rule and Security Group
@@ -23,7 +29,7 @@ resource "aws_security_group" "db_vpc_sg" {
 resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
   security_group_id = aws_security_group.db_vpc_sg.id
   ip_protocol       = "tcp"
-  from_port         = 22
-  to_port           = 22
+  from_port         = 5432
+  to_port           = 5432
   cidr_ipv4         = "0.0.0.0/0"
 }
