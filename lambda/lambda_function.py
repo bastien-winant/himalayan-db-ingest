@@ -9,10 +9,6 @@ import logging
 # Initialize the S3 client outside of the handler
 s3_client = boto3.client('s3')
 
-# Initialize the logger
-logger = logging.getLogger()
-logger.setLevel("INFO")
-
 # fetch and unzip the raw data files
 def fetch_data():
 	url = "https://www.himalayandatabase.com/downloads/Himalayan%20Database.zip"

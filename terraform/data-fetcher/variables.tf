@@ -17,6 +17,11 @@ variable "code_bucket_prefix" {
   description = "Prefix for the S3 bucket holding the S3 lambda scripts"
 }
 
+variable "lambda_package_file" {
+  type = string
+  default = "lambda_function.zip"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   default     = "192.168.0.0/16"
