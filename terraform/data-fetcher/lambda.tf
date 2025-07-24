@@ -2,13 +2,14 @@
 data "archive_file" "lambda_deployment_package" {
   type        = "zip"
   source_file = "${path.module}/../../src/${var.lambda_package_file}"
-  output_path = "${path.module}/src/${var.lambda_package_file}.zip"
+  output_path = "${path.module}/src/${var.lambda_package_file}"
 }
 
 # Load the deployment package to s3
 resource "aws_s3_object" "lambda_deployment_package_object" {
   bucket = aws_s3_bucket.lambda_code_file.id
   key    = var.lambda_package_file
+  source = "${path.module}/src/${var.lambda_package_file}"
 }
 
 # Create log group for lambda function logs
