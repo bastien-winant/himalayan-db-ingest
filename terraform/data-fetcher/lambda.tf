@@ -13,21 +13,20 @@ resource "aws_s3_object" "lambda_deployment_package_object" {
 
 # Create log group for lambda function logs
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  name              = "/aws/lambda/himaldb_lambda_function_log"
+  name              = "/aws/lambda/${var.lambda_function_name}"
   retention_in_days = 14
-
-  tags = {
-    Environment = "production"
-    Application = "example"
-  }
 }
 
 # Lambda function
 resource "aws_lambda_function" "lambda_function" {
-  function_name = "himaldb_lambda_function"
+  function_name = var.lambda_function_name
   role = aws_iam_role.lambda_exec_role.arn
   runtime = "python3.9"
   handler = "lambda_function.handler"
+  source_code_hash = data.archive_file.lambda_deployment_package.output_base64sha256
+
+  s3_bucket = aws_s3_object.lambda_deployment_package_object.bucket
+  s3_key = aws_s3_object.lambda_deployment_package_object.key
 
   # Advanced logging configuration
   logging_config {
@@ -36,15 +35,8 @@ resource "aws_lambda_function" "lambda_function" {
     system_log_level      = "WARN"
   }
 
-  environment {
-    variables = {
-      ENVIRONMENT = "production"
-      LOG_LEVEL   = "info"
-    }
-  }
-
-  tags = {
-    Environment = "production"
-    Application = "example"
-  }
+  depends_on = [
+    aws_cloudwatch_log_group.lambda_log_group,
+    aws_s3_object.lambda_deployment_package_object
+  ]
 }

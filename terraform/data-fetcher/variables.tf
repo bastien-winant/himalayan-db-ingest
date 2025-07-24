@@ -17,6 +17,11 @@ variable "code_bucket_prefix" {
   description = "Prefix for the S3 bucket holding the S3 lambda scripts"
 }
 
+variable "lambda_function_name" {
+  type = string
+  default = "himaldb_lambda_function"
+}
+
 variable "lambda_package_file" {
   type = string
   default = "lambda_function.zip"
