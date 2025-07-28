@@ -37,12 +37,13 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   vpc_config {
-    subnet_ids = var.private_subnets_cidr
+    subnet_ids = [aws_subnet.db_vpc_private_subnets[0].id, aws_subnet.db_vpc_private_subnets[1].id]
     security_group_ids = [aws_security_group.lambda_vpc_sg.id]
   }
 
   depends_on = [
     aws_cloudwatch_log_group.lambda_log_group,
-    aws_s3_object.lambda_deployment_package_object
+    aws_s3_object.lambda_deployment_package_object,
+    aws_security_group.lambda_vpc_sg
   ]
 }
