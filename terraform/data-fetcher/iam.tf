@@ -12,13 +12,14 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-# Role that Lambda can assume
+# Create a role that Lambda can assume
 resource "aws_iam_role" "lambda_exec_role" {
   name               = "lambda_execution_role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
+# Attach the permissions for Lambda to execute in VPC
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
-    role       = aws_iam_role.lambda_exec_role.name
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
