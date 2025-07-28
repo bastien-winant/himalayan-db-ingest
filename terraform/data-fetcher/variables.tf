@@ -18,12 +18,12 @@ variable "code_bucket_prefix" {
 }
 
 variable "lambda_function_name" {
-  type = string
+  type    = string
   default = "himaldb_lambda_function"
 }
 
 variable "lambda_package_file" {
-  type = string
+  type    = string
   default = "lambda_function.zip"
 }
 
