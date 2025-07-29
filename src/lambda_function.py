@@ -1,58 +1,56 @@
-import json
 import logging
 import os
 import subprocess
 import csv
 from dbfread import DBF
 
-
-def check_directory(path):
-	return os.path.exists(path)
-
-def fetch_himal_data(data_folder, zip_file):
+def fetch_data(target_filename):
 	url = "https://www.himalayandatabase.com/downloads/Himalayan%20Database.zip"
-	fetch_command = f"curl -s -o {data_folder}/{zip_file} {url}"
+	fetch_command = f"curl -s -o ./tmp/{target_filename} {url}"
 
 	result = subprocess.run(fetch_command.split(), capture_output=True, text=True)
 	return result.returncode == 0
 
-def unzip_himal_data(data_folder, zip_file):
-	unzip_command = f"unzip {data_folder}/{zip_file} -d {data_folder}"
-
+def unzip_file(source_filename):
+	unzip_command = f"unzip ./tmp/{source_filename} -d ./tmp"
 	result = subprocess.run(unzip_command.split(), capture_output=True, text=True)
 	return result.returncode == 0
 
-def upload_himal_data(data_folder):
-	data_folder = f"{data_folder}/Himalayan Database/HIMDATA"
+def dbf_to_csv(dbf_filepath, csv_filepath):
+	table = DBF(dbf_filepath)
+
+	with open(csv_filepath, 'w') as csvfile:
+		writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
+		writer.writerow(table.field_names)
+
+		for record in table:
+			writer.writerow(list(record.values()))
+
+def upload_dbfs():
+	data_folder = f"./tmp/Himalayan Database/HIMDATA"
 
 	for file in os.listdir(data_folder):
 		if file.endswith(".DBF"):
 			full_dbf_path = os.path.abspath(os.path.join(data_folder, file))
-			file_csv = file.replace("DBF", "CSV")
+			full_csv_path = os.path.join("./tmp", file.replace(".DBF", ".csv"))
+			dbf_to_csv(full_dbf_path, full_csv_path)
 
-			table = DBF(full_dbf_path)
 
-			with open(f"./tmp/{file_csv}", 'w') as csvfile:
-				writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
-				writer.writerow(table.field_names)
-
-				for record in table:
-					writer.writerow(list(record.values()))
+def check_directory(path):
+	return os.path.exists(path)
 
 def lambda_handler(event, context):
-	data_path = "./tmp"
-	if not check_directory(data_path):
-		os.mkdir(data_path)
+	if not check_directory("./tmp"):
+		os.mkdir("./tmp")
 
-	fetch_success = fetch_himal_data("./tmp", "data.zip")
+	fetch_success = fetch_data("data.zip")
 
 	unzip_success = False
 	if fetch_success:
-		unzip_success = unzip_himal_data("./tmp", "data.zip")
+		unzip_success = unzip_file("data.zip")
 
 	if unzip_success:
-		upload_himal_data("./tmp")
-		os.remove("./tmp/data.zip")
+		upload_dbfs()
 
 if __name__=="__main__":
 	lambda_handler(None, None)
