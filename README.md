@@ -1,1 +1,1 @@
-# himalayan-db-modeling
+# himalayan-db-ingest
